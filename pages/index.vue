@@ -1,63 +1,122 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">panelr</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
+  <div>
+    <b-container>
+      <h1>Panelr</h1>
+      <b-form @submit.prevent="calculate">
+        <b-form-group
+          label="Wall Width"
+          label-for="wall-width"
+          description="Use cms"
         >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
+          <b-form-input
+            id="wall-width"
+            v-model="inputs.width"
+            type="number"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Wall Height"
+          label-for="wall-height"
+          description="Use cms"
         >
-          GitHub
-        </a>
-      </div>
-    </div>
+          <b-form-input
+            id="wall-height"
+            v-model="inputs.height"
+            type="number"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Border Width"
+          label-for="border-width"
+          description="Use cms"
+        >
+          <b-form-input
+            id="border-width"
+            v-model="inputs.borderWidth"
+            type="number"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Horizontal Panels"
+          label-for="horizontal-panels"
+          description="Use cms"
+        >
+          <b-form-input
+            id="horizontal-panels"
+            v-model="inputs.horizontal"
+            type="number"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Vertical Panels"
+          label-for="vertical-panels"
+          description="Use cms"
+        >
+          <b-form-input
+            id="vertical-panels"
+            v-model="inputs.vertical"
+            type="number"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-button type="submit" variant="primary">Calculate</b-button>
+      </b-form>
+      {{ horizontalPanelWidth }}
+    </b-container>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      inputs: {
+        width: null,
+        height: null,
+        borderWidth: null,
+        horizontal: null,
+        vertical: null,
+      },
+      calculated: false,
+    }
+  },
+  computed: {
+    totalHorizontalBorderWidth() {
+      return (
+        (parseInt(this.inputs.horizontal) + 1) *
+        parseInt(this.inputs.borderWidth)
+      )
+    },
+    totalVerticalBorderWidth() {
+      return this.inputs.vertical * this.inputs.borderWidth
+    },
+    horizontalPanelWidth() {
+      return (
+        (this.inputs.width - this.totalHorizontalBorderWidth) /
+        this.inputs.horizontal
+      )
+    },
+  },
+  mounted() {
+    this.inputs = {
+      width: 293,
+      height: 233,
+      borderWidth: 7,
+      horizontal: 5,
+      vertical: 4,
+    }
+    this.calculate()
+  },
+  methods: {
+    calculate() {
+      // const totalBorderWidth = this.inputs.horizontal * this.inputs.borderWidth
+    },
+  },
+}
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
+<style></style>
